@@ -26,6 +26,8 @@ pom.xml中已设置mainclass为com.gh.WordsCount.WordsCount
 可直接输入
 ```
 mvn exec:java
-或者在不设置时输入
+```
+或者在不设置mainclass时输入
 ```
 mvn exec:java -Dexec.mainClass=com.gh.WordsCount.WordsCount
+```
