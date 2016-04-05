@@ -1,5 +1,6 @@
 WordsCount
 ===================================
+本项目为一个基于Maven 3.3.9  的mvn工程
 
 实现功能
 -----------------------------------
@@ -31,3 +32,5 @@ mvn exec:java
 ```
 mvn exec:java -Dexec.mainClass=com.gh.WordsCount.WordsCount
 ```
+优化过程
+-----------------------------------
