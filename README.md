@@ -111,4 +111,15 @@ public class WordCount
 
 4.输出单词和对应个数
 
+测试的结果如下：
+test数据："The" you're the (sap ) ! |. 
+结果：   
+
+the : 2  
+
+sap : 1   
+
+you're : 1  
+
+
 
