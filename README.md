@@ -111,12 +111,20 @@ public class WordCount
 
 4.输出单词和对应个数
 
-测试的结果如下：
-test数据："The" you're the (sap ) ! |. 
+测试的结果如下：  
+
+test数据："The" you're the (sap ) ! |.   
+
 结果：   
 the : 2  
 sap : 1   
 you're : 1  
+
+该算法能对文本中的单词进行准确计数，排除其他符号和大小写干扰，基本实现功能。
+但是在大容量文件中执行速度会很慢，于是考虑多线程处理文件的方式。
+
+###version 2.0
+
 
 
 
