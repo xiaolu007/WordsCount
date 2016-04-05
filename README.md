@@ -34,3 +34,4 @@ mvn exec:java -Dexec.mainClass=com.gh.WordsCount.WordsCount
 ```
 优化过程
 -----------------------------------
+###version 1.0
