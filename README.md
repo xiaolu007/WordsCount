@@ -35,3 +35,68 @@ mvn exec:java -Dexec.mainClass=com.gh.WordsCount.WordsCount
 优化过程
 -----------------------------------
 ###version 1.0
+```Java
+package com.test.WordCount;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+
+public class WordCount 
+{
+	private static String file_path = "D:\\test.txt";
+	private static HashMap<String, Integer> result = new HashMap<String, Integer>();
+	
+    public static void main( String[] args )
+    {
+    	File file = new File(file_path);
+    	String current_line = null;
+    	String[] current_words = null;
+    	BufferedReader br = null;
+    	try 
+    	{
+    		br = new BufferedReader(new FileReader(file.getPath()));
+			while((current_line = br.readLine()) != null)
+			{
+				current_words = current_line.split("[^a-zA-Z']+");
+				for(int i=0; i<current_words.length; i++)
+				{		
+
+					if(current_words[i].equals(""))
+						continue;			
+					
+				    if (result.get(current_words[i].toLowerCase()) == null)
+	                {
+				    	result.put(current_words[i].toLowerCase(), 1);
+	                }
+				    else
+	                {
+	                	result.put(current_words[i].toLowerCase(), result.get(current_words[i])+1);
+	                }
+	             				
+					
+				}
+			}
+    	}
+    	catch (IOException e) 
+    	{
+            e.printStackTrace();
+        }
+    	
+    	for (HashMap.Entry<String, Integer> entry : result.entrySet()) 
+    	{
+    		System.out.println( entry.getKey() + " : " + entry.getValue());
+    	}
+    	
+    	try 
+    	{
+			br.close();
+		} 
+    	catch (IOException e) 
+    	{
+			e.printStackTrace();
+		}
+    }
+}
+```
