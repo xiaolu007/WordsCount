@@ -18,3 +18,9 @@ WordsCount
 * Eclipse Mars.2 Release (4.5.2)   
 
 * Maven 3.3.9  
+
+mvn命令行运行
+-----------------------------------
+在windows的cmd下：
+```
+mvn exec:java -Dexec.mainClass=com.gh.WordsCount.WordsCount
