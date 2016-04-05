@@ -35,6 +35,7 @@ mvn exec:java -Dexec.mainClass=com.gh.WordsCount.WordsCount
 优化过程
 -----------------------------------
 ###version 1.0
+第一个版本如下所示：
 ```Java
 package com.test.WordCount;
 import java.io.BufferedReader;
@@ -100,3 +101,13 @@ public class WordCount
     }
 }
 ```
+这个算法思路如下：
+1.定义一个BufferedReader对象，读取文本文件内容  
+
+2.逐行读取文本内容，使用spilt()方法分割字符串（正则表达式"[^a-zA-Z']+",除英文字母和'其他字符均为分隔符）   
+ 
+3.对分割后的字符串数组进行数目统计    
+
+4.输出单词和对应个数
+
+
