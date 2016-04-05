@@ -21,6 +21,11 @@ WordsCount
 
 mvn命令行运行
 -----------------------------------
+pom.xml中已设置mainclass为com.gh.WordsCount.WordsCount
 在windows的cmd下：
+可直接输入
+```
+mvn exec:java
+或者在不设置时输入
 ```
 mvn exec:java -Dexec.mainClass=com.gh.WordsCount.WordsCount
