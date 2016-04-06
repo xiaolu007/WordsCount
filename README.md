@@ -36,14 +36,13 @@ mvn命令行运行
 -----------------------------------
 项目pom.xml中已设置默认mainclass为com.gh.WordsCount.WordsCount 
 
-在windows的cmd下(将cmd目录更改到工程存放目录)：
-可直接输入：
+在windows的cmd下(将cmd目录更改到工程存放目录)，可直接输入：
 ```
 mvn exec:java
 ```
 运行结果如下(以几个单词的统计为例)： 
 ![mvn-cmd](https://github.com/IVYGOU/pictures/blob/master/mvn-cmd.png "mvn命令运行结果")  
-或者在不设置mainclass时输入：
+或者在不设置默认mainclass时输入：
 ```
 mvn exec:java -Dexec.mainClass=com.gh.WordsCount.WordsCount
 ```
