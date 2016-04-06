@@ -199,11 +199,12 @@ you're : 1
             	if (true == threadsDone)
             		break;
             }
-  ```
+```
 分割文件大小为splitSize，产生threadNum个子线程去统计每一个分割文件中单词出现次数。   
 
 刚开始分割文件时未考虑单词被截断的状况，后面考虑到这种情况加入if(false == Character.isLetter(ch) && '\'' != ch)判断，若分割位置下一个byte是字母或‘，则不在此处分割继续往下找分割位置，防止单词截断。
 #####子线程处理函数(CountWordsThread.java)
+
 ```Java
  //重写run()方法
     @Override
