@@ -35,7 +35,7 @@ mvn exec:java -Dexec.mainClass=com.gh.WordsCount.WordsCount
 优化过程
 -----------------------------------
 ###version 1.0
-第一个版本如下所示：
+第一个版本如下所示：（WordCount.java）
 ```Java
 package com.test.WordCount;
 import java.io.BufferedReader;
@@ -119,7 +119,8 @@ you're : 1
 但是在大容量文件中执行速度会很慢，于是考虑多线程处理文件的方式。
 
 ###version 2.0
-####大文件产生
+在上一版本的基础上添加大文件的产生和多线程处理
+####大文件产生（WordsCount.java）
 大于1G的英文文档文件很难下载到，即使下载到也无法正确知道里面英文单词的数量，因此考虑自己生成一个大文件，可清楚知道里面各个单词的数量。
 ```Java
 	File file = new File("1.txt");
@@ -142,4 +143,90 @@ you're : 1
         fileChannel.close();
 ```
 将1.txt（1849KB）复制1000次可得2.txt（约1.8G），并且明确知道每个单词的出现频率，满足输入数据要求。
-####多线程
+####多线程处理
+#####分成多个子线程统计每个英文单词出现的次数（DealFileText.java）
+```Java
+	for (int num = 0; num < threadNum; num++)
+	{
+	    	if (currentPos < file.length())
+	    	{
+	    		CountWordsThread countWordsThread = null;
+	    		if (currentPos + splitSize < file.length())
+	    		{
+	    			RandomAccessFile raf = new RandomAccessFile(file,"r");
+	    			raf.seek(currentPos + splitSize);
+	    			int offset = 0;
+	    			while(true)
+	    			{
+	    				char ch = (char)raf.read();
+	    				//是否到文件末尾，到了跳出
+	    				if (-1 == ch)
+	    					break;
+	    				//是否是字母和'，都不是跳出（防止单词被截断）
+	    				if(false == Character.isLetter(ch) && '\'' != ch)
+	    					break;
+	    				offset++;
+	    			}
+	    				
+	    			countWordsThread = new CountWordsThread(file, currentPos, splitSize + offset);
+	    			currentPos += splitSize + offset;
+	    			raf.close();
+	    			}
+	    		else
+	    		{
+	    			countWordsThread = new CountWordsThread(file, currentPos, file.length() - currentPos);
+	    			currentPos = file.length();
+	    		}
+	    			Thread thread = new Thread(countWordsThread);
+	    			thread.start();
+	    			listCountWordsThreads.add(countWordsThread);
+	    			listThread.add(thread);
+	    		}
+	    	}
+	    	//判断线程是否执行完成
+	    	while(true) 
+            {
+            	boolean threadsDone = true;
+            	
+            	for (int loop = 0; loop < listThread.size(); loop++)
+            	{
+            		if (listThread.get(loop).getState() != Thread.State.TERMINATED)
+            		{
+            			threadsDone = false;
+            			break;
+            		}
+            	}
+            	if (true == threadsDone)
+            		break;
+            }
+  ```
+分割文件大小为splitSize，产生threadNum个子线程去统计每一个分割文件中单词出现次数。   
+
+刚开始分割文件时未考虑单词被截断的状况，后面考虑到这种情况加入if(false == Character.isLetter(ch) && '\'' != ch)判断，若分割位置下一个byte是字母或‘，则不在此处分割继续往下找分割位置，防止单词截断。
+#####子线程处理函数（CountWordsThread.java）
+```Java
+ //重写run()方法
+    @Override
+    public void run() 
+    {
+        String str = Charset.forName("UTF-8").decode(mbBuf).toString();
+        str = str.toLowerCase();
+        String[] strArray = str.split("[^a-zA-Z']+");
+        for(int i = 0; i<strArray.length; i++)
+	{		
+		if(strArray[i].equals(""))
+			continue;
+		if (hashMap.get(strArray[i]) == null)
+        	{
+			hashMap.put(strArray[i], 1);
+		}
+		else
+            	{
+		  	hashMap.put(strArray[i], hashMap.get(strArray[i]) + 1);
+            	}
+	}
+    }
+     ```
+子线程run()方法里对字符串分割并统计次数，如version1里处理方式相同。
+
+
