@@ -34,7 +34,7 @@ WordsCount
 
 mvn命令行运行
 -----------------------------------
-pom.xml中已设置mainclass为com.gh.WordsCount.WordsCount
+pom.xml中已设置mainclass为com.gh.WordsCount.WordsCount(工程文件放在cmd运行目录的情况下)
 在windows的cmd下：
 可直接输入
 ```
