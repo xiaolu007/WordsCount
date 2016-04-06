@@ -48,37 +48,32 @@ public class WordCount
 {
 	private static String file_path = "D:\\test.txt";
 	private static HashMap<String, Integer> result = new HashMap<String, Integer>();
-	
-    public static void main( String[] args )
-    {
-    	File file = new File(file_path);
-    	String current_line = null;
-    	String[] current_words = null;
-    	BufferedReader br = null;
+	public static void main( String[] args )
+	{
+    		File file = new File(file_path);
+    		String current_line = null;
+    		String[] current_words = null;
+    		BufferedReader br = null;
     	try 
     	{
     		br = new BufferedReader(new FileReader(file.getPath()));
-			while((current_line = br.readLine()) != null)
-			{
-				current_words = current_line.split("[^a-zA-Z']+");
-				for(int i=0; i<current_words.length; i++)
-				{		
-
-					if(current_words[i].equals(""))
-						continue;			
-					
-				    if (result.get(current_words[i].toLowerCase()) == null)
-	                {
+		while((current_line = br.readLine()) != null)
+		{
+			current_words = current_line.split("[^a-zA-Z']+");
+			for(int i=0; i<current_words.length; i++)
+			{		
+				if(current_words[i].equals(""))
+					continue;			
+				if (result.get(current_words[i].toLowerCase()) == null)
+	                	{
 				    	result.put(current_words[i].toLowerCase(), 1);
-	                }
-				    else
-	                {
+	        		}
+				else
+	                	{
 	                	result.put(current_words[i].toLowerCase(), result.get(current_words[i])+1);
-	                }
-	             				
-					
-				}
+	                	}
 			}
+		}
     	}
     	catch (IOException e) 
     	{
@@ -92,12 +87,12 @@ public class WordCount
     	
     	try 
     	{
-			br.close();
-		} 
+		br.close();
+	} 
     	catch (IOException e) 
     	{
-			e.printStackTrace();
-		}
+		e.printStackTrace();
+	}
     }
 }
 ```
@@ -126,7 +121,25 @@ you're : 1
 ###version 2.0
 ####大文件产生
 大于1G的英文文档文件很难下载到，即使下载到也无法正确知道里面英文单词的数量，因此考虑自己生成一个大文件，可清楚知道里面各个单词的数量。
-
-
-
-
+```Java
+	File file = new File("1.txt");
+	FileChannel fileChannel = new RandomAccessFile(file, "rw").getChannel();
+	FileLock lock = fileChannel.lock(0, file.length(), false);
+	MappedByteBuffer mbBuf = fileChannel.map(FileChannel.MapMode.READ_ONLY, 0, file.length());
+	String str = Charset.forName("UTF-8").decode(mbBuf).toString() + "\r\n";
+	File file2 = new File("2.txt");
+	if (file2.exists())
+	{
+		file2.delete();
+	}	
+        FileOutputStream outputFileStream = new FileOutputStream(file2 ,true);
+        for (int i = 0; i < 1000; i++)
+        {
+        	outputFileStream.write(str.getBytes("UTF-8"));
+        }      
+        outputFileStream.close();
+        lock.release();
+        fileChannel.close();
+```
+将1.txt（1849KB）复制1000次可得2.txt（约1.8G），并且明确知道每个单词的出现频率，满足输入数据要求。
+####多线程
