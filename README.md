@@ -35,7 +35,7 @@ mvn exec:java -Dexec.mainClass=com.gh.WordsCount.WordsCount
 优化过程
 -----------------------------------
 ###version 1.0
-第一个版本如下所示：（WordCount.java）
+####第一个版本如下所示：(WordCount.java)
 ```Java
 package com.test.WordCount;
 import java.io.BufferedReader;
@@ -120,7 +120,7 @@ you're : 1
 
 ###version 2.0
 在上一版本的基础上添加大文件的产生和多线程处理
-####大文件产生（WordsCount.java）
+####大文件产生(WordsCount.java)
 大于1G的英文文档文件很难下载到，即使下载到也无法正确知道里面英文单词的数量，因此考虑自己生成一个大文件，可清楚知道里面各个单词的数量。
 ```Java
 	File file = new File("1.txt");
@@ -144,7 +144,7 @@ you're : 1
 ```
 将1.txt（1849KB）复制1000次可得2.txt（约1.8G），并且明确知道每个单词的出现频率，满足输入数据要求。
 ####多线程处理
-#####分成多个子线程统计每个英文单词出现的次数（DealFileText.java）
+#####分成多个子线程统计每个英文单词出现的次数(DealFileText.java)
 ```Java
 	for (int num = 0; num < threadNum; num++)
 	{
@@ -203,7 +203,7 @@ you're : 1
 分割文件大小为splitSize，产生threadNum个子线程去统计每一个分割文件中单词出现次数。   
 
 刚开始分割文件时未考虑单词被截断的状况，后面考虑到这种情况加入if(false == Character.isLetter(ch) && '\'' != ch)判断，若分割位置下一个byte是字母或‘，则不在此处分割继续往下找分割位置，防止单词截断。
-#####子线程处理函数（CountWordsThread.java）
+#####子线程处理函数(CountWordsThread.java)
 ```Java
  //重写run()方法
     @Override
@@ -227,6 +227,55 @@ you're : 1
 	}
     }
      ```
-子线程run()方法里对字符串分割并统计次数，如version1里处理方式相同。
+子线程run()方法里对字符串分割并统计次数，如version1.0里处理方式相同。
+#####统计总数目线程(DealFileText.java)
+```Java
+    //当分别统计的线程结束后，开始统计总数目的线程
+    	Thread mainThread = new Thread() 
+    	{
+    	   //重写run()方法
+        	 public void run() 
+        	 {
+                    // 使用TreeMap保证结果有序（按首字母排序）
+                    TreeMap<String, Integer> tMap = new TreeMap<String, Integer>();
+                	for (int loop = 0; loop < listCountWordsThreads.size(); loop++)
+                	{
+                		Map<String, Integer> hMap = listCountWordsThreads.get(loop).getResultMap();
+                        	Set<String> keys = hMap.keySet();
+                        	Iterator<String> iterator = keys.iterator();
+                        	while (iterator.hasNext()) 
+                	 	{
+                            		String key = (String) iterator.next();
+                            		if(key.equals(""))
+        					continue;			
+        				if (tMap.get(key) == null)
+        	                	{
+        					tMap.put(key, hMap.get(key));
+        	        	 	}
+        				else
+        	                	{
+        					tMap.put(key, tMap.get(key) + hMap.get(key));
+        	                	}
+                		}
+                	}
+                	for (int loop = 0; loop < listThread.size(); loop++)
+                	{
+                		listThread.get(loop).interrupt();
+                	}
+                	Set<String> keys = tMap.keySet();
+                	Iterator<String> iterator = keys.iterator();
+                    	while (iterator.hasNext()) 
+                	{
+                		 String key = (String) iterator.next();
+                        	System.out.println("key:" + key + " value:" + tMap.get(key));
+                    	}
+                    return;
+                }
+        };
+        ```
+当所有统计单词子线程的程序执行完成后，开始此线程，将子线程的统计结果存入hashmap中。后来考虑到单词数目很多的情况下不方便查看，所以改为存在TreeMap中，按首字母（A~Z）的顺序输出单词和对应出现次数。   
 
+经2.txt数据输入测试，能正确输出结果。
 
+###version 2.1
+上一版能对大文件进行处理，但是并未考虑几个线程，分割文件大小多大时，处理时间最短。
