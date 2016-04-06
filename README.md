@@ -54,8 +54,8 @@ public class WordCount
     		String current_line = null;
     		String[] current_words = null;
     		BufferedReader br = null;
-    	try 
-    	{
+    		try 
+    		{
     		br = new BufferedReader(new FileReader(file.getPath()));
 		while((current_line = br.readLine()) != null)
 		{
@@ -171,7 +171,7 @@ you're : 1
 	    			countWordsThread = new CountWordsThread(file, currentPos, splitSize + offset);
 	    			currentPos += splitSize + offset;
 	    			raf.close();
-	    			}
+	    		}
 	    		else
 	    		{
 	    			countWordsThread = new CountWordsThread(file, currentPos, file.length() - currentPos);
@@ -181,8 +181,8 @@ you're : 1
 	    			thread.start();
 	    			listCountWordsThreads.add(countWordsThread);
 	    			listThread.add(thread);
-	    		}
 	    	}
+	}
 	    	//判断线程是否执行完成
 	    	while(true) 
             {
