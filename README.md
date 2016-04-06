@@ -231,6 +231,7 @@ you're : 1
 子线程run()方法里对字符串分割并统计次数，如version1.0里处理方式相同。
 ####统计总数目线程(DealFileText.java)
 
+####分成多个子线程统计每个英文单词出现的次数(DealFileText.java)
 ```Java
     //当分别统计的线程结束后，开始统计总数目的线程
     	Thread mainThread = new Thread() 
