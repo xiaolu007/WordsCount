@@ -120,12 +120,11 @@ public class WordCount
 
 测试的结果如下：  
 
-test数据："The" you're the (sap ) ! |.   
+test数据：
+![test](https://github.com/IVYGOU/pictures/blob/master/test.png "test.txt")  
 
 结果：   
-the : 2  
-sap : 1   
-you're : 1  
+![test-jieguo](https://github.com/IVYGOU/pictures/blob/master/test-jieguo.png "test.txt统计结果")  
 
 该算法能对文本中的单词进行准确计数，排除其他符号和大小写干扰，基本实现功能。
 但是在大容量文件中执行速度会很慢，于是考虑多线程处理文件的方式。
@@ -296,7 +295,7 @@ you're : 1
 ### version 2.1
 上一版能对大文件进行处理，但是并未考虑电脑内存大小，以及在几个线程，分割文件大小多大时，处理时间最短。   
 
-经过不断测试得出：(计算机配置：32位，4G内存)   
+经过不断测试得出：(计算机配置：64位，32内存)   
 
 1.当线程数超过10个时，程序会运行的非常慢，因为线程调度耗时和资源竞争等原因。   
 
