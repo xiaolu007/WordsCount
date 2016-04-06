@@ -120,7 +120,8 @@ public class WordCount
 
 测试的结果如下：  
 
-test数据：
+test数据：   
+
 ![test](https://github.com/IVYGOU/pictures/blob/master/test.png "test.txt")  
 
 结果：   
