@@ -249,47 +249,43 @@ test数据：
 
 ```Java
     //当分别统计的线程结束后，开始统计总数目的线程
-    	Thread mainThread = new Thread() 
+    	new Thread( () ->
     	{
-    	   //重写run()方法
-        	 public void run() 
-        	 {
-                    // 使用TreeMap保证结果有序（按首字母排序）
-                    TreeMap<String, Integer> tMap = new TreeMap<String, Integer>();
-                	for (int loop = 0; loop < listCountWordsThreads.size(); loop++)
-                	{
-                		Map<String, Integer> hMap = listCountWordsThreads.get(loop).getResultMap();
-                        	Set<String> keys = hMap.keySet();
-                        	Iterator<String> iterator = keys.iterator();
-                        	while (iterator.hasNext()) 
-                	 	{
-                            		String key = (String) iterator.next();
-                            		if(key.equals(""))
-        					continue;			
-        				if (tMap.get(key) == null)
-        	                	{
-        					tMap.put(key, hMap.get(key));
-        	        	 	}
-        				else
-        	                	{
-        					tMap.put(key, tMap.get(key) + hMap.get(key));
-        	                	}
-                		}
-                	}
-                	for (int loop = 0; loop < listThread.size(); loop++)
-                	{
-                		listThread.get(loop).interrupt();
-                	}
-                	Set<String> keys = tMap.keySet();
-                	Iterator<String> iterator = keys.iterator();
-                    	while (iterator.hasNext()) 
-                	{
-                		 String key = (String) iterator.next();
-                        	System.out.println("key:" + key + " value:" + tMap.get(key));
-                    	}
-                    return;
+                // 使用TreeMap保证结果有序（按首字母排序）
+                TreeMap<String, Integer> tMap = new TreeMap<String, Integer>();
+                for (int loop = 0; loop < listCountWordsThreads.size(); loop++)
+                {
+                	Map<String, Integer> hMap = listCountWordsThreads.get(loop).getResultMap();
+                        Set<String> keys = hMap.keySet();
+                        Iterator<String> iterator = keys.iterator();
+                        while (iterator.hasNext()) 
+                        {
+                            	String key = (String) iterator.next();
+                            	if(key.equals(""))
+        				continue;			
+        			if (tMap.get(key) == null)
+        	                {
+        				tMap.put(key, hMap.get(key));
+        	                }
+        			else
+        	                {
+        				 tMap.put(key, tMap.get(key) + hMap.get(key));
+        	                }
+                        }
                 }
-        };
+                for (int loop = 0; loop < listThread.size(); loop++)
+                {
+                	listThread.get(loop).interrupt();
+                }
+                Set<String> keys = tMap.keySet();
+                Iterator<String> iterator = keys.iterator();
+                while (iterator.hasNext()) 
+                {
+                	String key = (String) iterator.next();
+                        System.out.println("单词:" + key + " 出现次数:" + tMap.get(key));
+                }       	
+                return;
+    	}).start();
 ```
 当所有统计单词子线程的程序执行完成后，开始此线程。将子线程的统计结果存入hashmap中。后来考虑到单词数目很多的情况下不方便查看，所以改为存在TreeMap中，按首字母（A~Z）的顺序输出单词和对应出现次数。   
 
