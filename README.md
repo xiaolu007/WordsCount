@@ -143,8 +143,8 @@ you're : 1
         fileChannel.close();
 ```
 将1.txt（1849KB）复制1000次可得2.txt（约1.8G），并且明确知道每个单词的出现频率，满足输入数据要求。
-####多线程处理
-#####分成多个子线程统计每个英文单词出现的次数(DealFileText.java)
+
+####分成多个子线程统计每个英文单词出现的次数(DealFileText.java)
 ```Java
 	for (int num = 0; num < threadNum; num++)
 	{
@@ -203,7 +203,7 @@ you're : 1
 分割文件大小为splitSize，产生threadNum个子线程去统计每一个分割文件中单词出现次数。   
 
 刚开始分割文件时未考虑单词被截断的状况，后面考虑到这种情况加入if(false == Character.isLetter(ch) && '\'' != ch)判断，若分割位置下一个byte是字母或‘，则不在此处分割继续往下找分割位置，防止单词截断。
-#####子线程处理函数(CountWordsThread.java)
+####子线程处理函数(CountWordsThread.java)
 
 ```Java
  //重写run()方法
@@ -230,6 +230,7 @@ you're : 1
      ```
 子线程run()方法里对字符串分割并统计次数，如version1.0里处理方式相同。
 ####统计总数目线程(DealFileText.java)
+
 ```Java
     //当分别统计的线程结束后，开始统计总数目的线程
     	Thread mainThread = new Thread() 
