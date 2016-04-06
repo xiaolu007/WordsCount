@@ -154,7 +154,8 @@ you're : 1
         lock.release();
         fileChannel.close();
 ```
-将1.txt（1849KB）复制1000次可得2.txt（约1.8G），并且明确知道每个单词的出现频率，满足输入数据要求。
+将1.txt（1389KB）复制1000次可得2.txt（约1.4G），并且明确知道每个单词的出现频率，满足输入数据要求。
+![test1 2](https://github.com/IVYGOU/pictures/blob/master/test1%202.png "由1.txt生成的2.txt")  
 
 ####分成多个子线程统计每个英文单词出现的次数(DealFileText.java)
 ```Java
